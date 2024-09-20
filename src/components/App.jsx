@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { initialItems } from "../lib/constants";
 import BackgroundHeading from "./BackgroundHeading";
 import Footer from "./Footer";
@@ -7,7 +7,8 @@ import ItemList from "./ItemList";
 import Sidebar from "./Sidebar";
 
 function App() {
-  const [items, setItems] = useState(initialItems);
+  const itemFromLocalStorage = JSON.parse(localStorage.getItem("items"));
+  const [items, setItems] = useState(itemFromLocalStorage || initialItems);
 
   const onToggleItem = (id) => {
     const newItems = items.map((item) => {
@@ -57,6 +58,10 @@ function App() {
 
   const totalItems = items.length;
   const totalPackedItems = items.filter((item) => item.packed).length;
+
+  useEffect(() => {
+    localStorage.setItem("items", JSON.stringify(items));
+  }, [items]);
 
   return (
     <>
